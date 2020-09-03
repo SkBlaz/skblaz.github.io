@@ -197,9 +197,13 @@ figure {
 }
 
 img {
-  vertical-align: middle;
-  border-style: none;
+	vertical-align: middle;
+	border: 2px solid #000;
+	box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.8);
+	border-style: none;
+	border-radius: 14%;
 }
+
 
 svg {
   overflow: hidden;
@@ -10049,7 +10053,7 @@ hr.light {
 header.masthead {
   padding-top: 10rem;
   padding-bottom: calc(10rem - 4.5rem);
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.6) 100%), url("../assets/img/background.jpg");
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.6) 100%), url("../assets/img/background4.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: scroll;
