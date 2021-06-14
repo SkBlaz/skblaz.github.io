@@ -1,63 +1,78 @@
-/*!
-    * Start Bootstrap - Creative v6.0.1 (https://startbootstrap.com/themes/creative)
-    * Copyright 2013-2020 Start Bootstrap
-    * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-creative/blob/master/LICENSE)
-    */
-    (function($) {
-  "use strict"; // Start of use strict
+//Some custom background stuff BS2021
 
-  // Smooth scrolling using jQuery easing
-  $('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function() {
-    if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-      var target = $(this.hash);
-      target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-      if (target.length) {
-        $('html, body').animate({
-          scrollTop: (target.offset().top - 72)
-        }, 1000, "easeInOutExpo");
-        return false;
-      }
+var rcol = ["green","blue","red","yellow","white"]
+var giter = 0;
+
+Array.prototype.random = function () {
+    return this[Math.floor((Math.random()*this.length))];
+}
+
+function cleanCanvas(){
+
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+}
+
+function initializeCanvas(){
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    canvas.width = $(window).width();   // Add this to your code
+    canvas.height = $(window).height(); // Add this to your code
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    return ctx
+}
+
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function drawRandomLine(ctx, x0, y0){
+    // if (giter % 30 == 0){
+    // 	cleanCanvas();
+    // }
+    var currentX = 0 + x0
+    var currentY = 0 + y0    
+    var dx = 2
+    var dy = 2
+    var r = 0
+    var rscale = 40
+    items = ["gray"]
+    while (r < 50) {
+	ctx.moveTo(currentX, currentY);
+	var dxTmp = dx + getRandomArbitrary(-1,1)*rscale + currentX
+	var dyTmp = dy + getRandomArbitrary(-1,1.4)*rscale + currentY
+	ctx.lineTo(dxTmp, dyTmp);
+	ctx.lineWidth = 0.008;
+	if (Math.random() > 0.3){
+	    var item = items[0];    
+	}else {
+	    var item = items[1];
+	}
+
+	ctx.strokeStyle = item;
+	ctx.globalAlpha = 0.9;
+	ctx.stroke();
+	ctx.fillStyle = rcol.random();
+	ctx.globalAlpha = 0.6;
+	ctx.fillRect(dxTmp-3,dyTmp-3,6,6);
+	currentX = dxTmp;
+	currentY = dyTmp;
+	r++;
     }
-  });
+    giter++;
+}
+initialCanvas = initializeCanvas();
+function drawAll(){
+    var k = 3
+    drawRandomLine(initialCanvas, k, k);
+}
 
-  // Closes responsive menu when a scroll trigger link is clicked
-  $('.js-scroll-trigger').click(function() {
-    $('.navbar-collapse').collapse('hide');
-  });
-
-  // Activate scrollspy to add active class to navbar items on scroll
-  $('body').scrollspy({
-    target: '#mainNav',
-    offset: 75
-  });
-
-  // Collapse Navbar
-  var navbarCollapse = function() {
-    if ($("#mainNav").offset().top > 100) {
-      $("#mainNav").addClass("navbar-scrolled");
-    } else {
-      $("#mainNav").removeClass("navbar-scrolled");
-    }
-  };
-  // Collapse now if page is not at top
-  navbarCollapse();
-  // Collapse the navbar when page is scrolled
-  $(window).scroll(navbarCollapse);
-
-  // Magnific popup calls
-  $('#portfolio').magnificPopup({
-    delegate: 'a',
-    type: 'image',
-    tLoading: 'Loading image #%curr%...',
-    mainClass: 'mfp-img-mobile',
-    gallery: {
-      enabled: true,
-      navigateByImgClick: true,
-      preload: [0, 1]
-    },
-    image: {
-      tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
-    }
-  });
-
-})(jQuery); // End of use strict
+//setInterval(drawAll, 400);
+//var iterations = 0;
+var core = setInterval(drawAll, 100);
+setTimeout(function( ) { clearInterval( core ); }, 15000);
