@@ -10133,9 +10133,9 @@ header.masthead h1 {
 
 .content-text {
     background-color: rgba(0,0,0,.5);
-    --r: 15% 75px 35vh 13vw/ 3em 5rem 29vmin 12.5vmax;
-    border-radius: var(--r);
-    clip-path: inset(0 round var(--r));
+    /* --r: 15% 75px 35vh 13vw/ 3em 5rem 29vmin 12.5vmax; */
+    /* border-radius: var(--r); */
+    /* clip-path: inset(0 round var(--r)); */
     
     /* box-shadow: 1px 0px white; */
     /* box-shadow: rgba(255, 255, 255, 0.56) 0px 10px 20px 4px; */
