@@ -1,6 +1,7 @@
 //Some custom background stuff BS2021
 
 var rcol = ["green","blue","red","yellow","white"]
+var rcol = ["red","white"]
 var giter = 0;
 
 Array.prototype.random = function () {
@@ -59,7 +60,8 @@ function drawRandomLine(ctx, x0, y0){
 	ctx.stroke();
 	ctx.fillStyle = rcol.random();
 	ctx.globalAlpha = 0.6;
-	ctx.fillRect(dxTmp-3,dyTmp-3,4,4);
+	var size = Math.floor(Math.random() * 3) + 4;
+	ctx.fillRect(dxTmp-3,dyTmp-3, size, size);
 	currentX = dxTmp;
 	currentY = dyTmp;
 	r++;
