@@ -1,7 +1,10 @@
 //Some custom background stuff BS2021
 
-var rcol = ["green","blue","red","yellow","white"]
-var rcol = ["green","white"]
+if (Math.random() > 0.5){
+	var rcol = ["green","blue","red","yellow","white"]
+}else{
+	var rcol = ["green","white"]
+}
 var giter = 0;
 
 Array.prototype.random = function () {
