@@ -46,28 +46,29 @@ function drawRandomLine(ctx, x0, y0){
     var r = 0
     var rscale = 40
     items = ["gray"]
-    while (r < 50) {
-	ctx.moveTo(currentX, currentY);
-	var dxTmp = dx + getRandomArbitrary(-1,1)*rscale + currentX
-	var dyTmp = dy + getRandomArbitrary(-1,1.4)*rscale + currentY
-	ctx.lineTo(dxTmp, dyTmp);
-	ctx.lineWidth = 0.02;
-	if (Math.random() > 0.3){
-	    var item = items[0];    
-	}else {
-	    var item = items[1];
-	}
+    while (r < 60) {
+		ctx.moveTo(currentX, currentY);
+		var dxTmp = dx + getRandomArbitrary(-1,1)*rscale + currentX
+		var dyTmp = dy + getRandomArbitrary(-1,1.4)*rscale + currentY
+		ctx.lineTo(dxTmp, dyTmp);
+		ctx.lineWidth = 0.02;
+		
+		if (Math.random() > 0.3){
+			var item = items[0];    
+		}else {
+			var item = items[1];
+		}
 
-	ctx.strokeStyle = item;
-	ctx.globalAlpha = 0.9;
-	ctx.stroke();
-	ctx.fillStyle = rcol.random();
-	ctx.globalAlpha = 0.6;
-	var size = Math.floor(Math.random() * 4) + 4;
-	ctx.fillRect(dxTmp-3,dyTmp-3, size, size);
-	currentX = dxTmp;
-	currentY = dyTmp;
-	r++;
+		ctx.strokeStyle = item;
+		ctx.globalAlpha = 0.9;
+		ctx.stroke();
+		ctx.fillStyle = rcol.random();
+		ctx.globalAlpha = 0.6;
+		var size = Math.floor(Math.random() * 4) + 4;
+		ctx.fillRect(dxTmp-3,dyTmp-3, size, size);
+		currentX = dxTmp;
+		currentY = dyTmp;
+		r++;
     }
     giter++;
 }
