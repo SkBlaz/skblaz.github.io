@@ -2,8 +2,8 @@
 
 if (Math.random() > 0.5){
 	var rcol = ["green","blue","red","yellow","white"]
-}else{
-	var rcol = ["green","white"]
+}else {
+	var rcol = ["green","white","orange"]
 }
 var giter = 0;
 
