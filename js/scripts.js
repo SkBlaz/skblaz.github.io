@@ -1,11 +1,10 @@
 //Some custom background stuff BS2021
 
 if (Math.random() > 0.5){
-	var rcol = ["green","blue","red","yellow","white"]
+    var rcol = ["green","blue","red","yellow","white"]
 }else {
-	var rcol = ["green","white","orange"]
+    var rcol = ["green","white","orange"]
 }
-var giter = 0;
 
 Array.prototype.random = function () {
     return this[Math.floor((Math.random()*this.length))];
@@ -35,50 +34,95 @@ function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-function drawRandomLine(ctx, x0, y0){
-    // if (giter % 30 == 0){
-    // 	cleanCanvas();
-    // }
-    var currentX = 0 + x0
-    var currentY = 0 + y0    
+function drawRandomLine(ctx, x0, y0, max = 0){
+
+    if (max == 0){
+	var currentX = 0 + x0
+	var currentY = 0 + y0
+    }else{
+	var currentX = $(document).width() -  x0 - Math.random()*50;
+	var currentY = $(document).height()/2;
+    }
     var dx = 2
     var dy = 2
     var r = 0
-    var rscale = 40
-    items = ["gray"]
-    while (r < 60) {
-		ctx.moveTo(currentX, currentY);
-		var dxTmp = dx + getRandomArbitrary(-1,1)*rscale + currentX
-		var dyTmp = dy + getRandomArbitrary(-1,1.4)*rscale + currentY
-		ctx.lineTo(dxTmp, dyTmp);
-		ctx.lineWidth = 0.02;
-		
-		if (Math.random() > 0.3){
-			var item = items[0];    
-		}else {
-			var item = items[1];
-		}
-
-		ctx.strokeStyle = item;
-		ctx.globalAlpha = 0.9;
-		ctx.stroke();
-		ctx.fillStyle = rcol.random();
-		ctx.globalAlpha = 0.6;
-		var size = Math.floor(Math.random() * 4) + 4;
-		ctx.fillRect(dxTmp-3,dyTmp-3, size, size);
-		currentX = dxTmp;
-		currentY = dyTmp;
-		r++;
+    if (max == 0){
+	var rscale = 40
+    }else{
+	var rscale = 40
     }
-    giter++;
+    items = ["gray"]
+    var mem = [];
+    
+    while (r < 60) {
+	
+	ctx.moveTo(currentX, currentY);
+	if (max == 0){
+	    var dxTmp = dx + getRandomArbitrary(-1,1)*rscale + currentX
+	    var dyTmp = dy + getRandomArbitrary(-1,1.4)*rscale + currentY
+	    
+	}else{
+	    var dxTmp = currentX - dx - getRandomArbitrary(-1,1)*rscale
+	    var dyTmp = currentY - dy - getRandomArbitrary(-1,1.4)*rscale
+	}
+	
+	mem.push(dxTmp);
+	mem.push(dyTmp);
+	
+	ctx.lineTo(dxTmp, dyTmp);
+	ctx.lineWidth = 0.02;
+	
+	if (Math.random() > 0.3){
+	    var item = items[0];
+	    
+	}else {
+	    var item = items[1];
+	    
+	}
+
+	ctx.strokeStyle = item;
+	ctx.globalAlpha = 0.9;
+	ctx.stroke();
+	ctx.fillStyle = rcol.random();
+	ctx.globalAlpha = 0.6;
+	
+	if (max == 0){
+	    var size = Math.floor(Math.random() * (4)) + 4;
+	    
+	}else{
+	    var size = Math.floor(Math.random() * (4)) + 4;
+	    
+	}
+
+	if (max == 0){
+	    ctx.fillRect(dxTmp-3,dyTmp-3, size, size);
+	}else{
+	    ctx.fillRect(dxTmp-3,dyTmp-3, size, size);
+	}
+	
+	currentX = dxTmp;
+	currentY = dyTmp;
+	r++;
+    }
+    
+    var arrayLength = mem.length;
+    
 }
-initialCanvas = initializeCanvas();
+
 function drawAll(){
     var k = 3
     drawRandomLine(initialCanvas, k, k);
 }
 
-//setInterval(drawAll, 400);
-//var iterations = 0;
-var core = setInterval(drawAll, 100);
+function drawAll2(){
+    var k = 3
+    drawRandomLine(initialCanvas, k, k, max = 2);
+}
+
+initialCanvas = initializeCanvas();
+
+var core = setInterval(drawAll, 300);
 setTimeout(function( ) { clearInterval( core ); }, 15000);
+
+var core2 = setInterval(drawAll2, 600);
+setTimeout(function( ) { clearInterval( core2 ); }, 15000);
