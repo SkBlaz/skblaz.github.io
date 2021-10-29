@@ -37,72 +37,72 @@ function getRandomArbitrary(min, max) {
 function drawRandomLine(ctx, x0, y0, max = 0){
 
     if (max == 0){
-	var currentX = 0 + x0
-	var currentY = 0 + y0
+		var currentX = 0 + x0
+		var currentY = 0 + y0
     }else{
-	var currentX = $(document).width() -  x0 - Math.random()*50;
-	var currentY = $(document).height()/2;
+		var currentX = $(document).width() -  x0 - Math.random()*50;
+		var currentY = $(document).height()/2;
     }
     var dx = 2
     var dy = 2
     var r = 0
     if (max == 0){
-	var rscale = 40
+		var rscale = 40
     }else{
-	var rscale = 40
+		var rscale = 80
     }
     items = ["gray"]
     var mem = [];
     
     while (r < 60) {
-	
-	ctx.moveTo(currentX, currentY);
-	if (max == 0){
-	    var dxTmp = dx + getRandomArbitrary(-1,1)*rscale + currentX
-	    var dyTmp = dy + getRandomArbitrary(-1,1.4)*rscale + currentY
-	    
-	}else{
-	    var dxTmp = currentX - dx - getRandomArbitrary(-1,1)*rscale
-	    var dyTmp = currentY - dy - getRandomArbitrary(-1,1.4)*rscale
-	}
-	
-	mem.push(dxTmp);
-	mem.push(dyTmp);
-	
-	ctx.lineTo(dxTmp, dyTmp);
-	ctx.lineWidth = 0.02;
-	
-	if (Math.random() > 0.3){
-	    var item = items[0];
-	    
-	}else {
-	    var item = items[1];
-	    
-	}
+		
+		ctx.moveTo(currentX, currentY);
+		if (max == 0){
+			var dxTmp = dx + getRandomArbitrary(-1,1)*rscale + currentX
+			var dyTmp = dy + getRandomArbitrary(-1,1.4)*rscale + currentY
+			
+		}else{
+			var dxTmp = currentX - dx - getRandomArbitrary(-1,1)*rscale
+			var dyTmp = currentY - dy - getRandomArbitrary(-1,1.4)*rscale
+		}
+		
+		mem.push(dxTmp);
+		mem.push(dyTmp);
+		
+		ctx.lineTo(dxTmp, dyTmp);
+		ctx.lineWidth = 0.02;
+		
+		if (Math.random() > 0.3){
+			var item = items[0];
+			
+		}else {
+			var item = items[1];
+			
+		}
 
-	ctx.strokeStyle = item;
-	ctx.globalAlpha = 0.9;
-	ctx.stroke();
-	ctx.fillStyle = rcol.random();
-	ctx.globalAlpha = 0.6;
-	
-	if (max == 0){
-	    var size = Math.floor(Math.random() * (4)) + 4;
-	    
-	}else{
-	    var size = Math.floor(Math.random() * (4)) + 4;
-	    
-	}
+		ctx.strokeStyle = item;
+		ctx.globalAlpha = 0.9;
+		ctx.stroke();
+		ctx.fillStyle = rcol.random();
+		ctx.globalAlpha = 0.6;
+		
+		if (max == 0){
+			var size = Math.floor(Math.random() * (4)) + 4;
+			
+		}else{
+			var size = Math.floor(Math.random() * (8)) + 8;
+			
+		}
 
-	if (max == 0){
-	    ctx.fillRect(dxTmp-3,dyTmp-3, size, size);
-	}else{
-	    ctx.fillRect(dxTmp-3,dyTmp-3, size, size);
-	}
-	
-	currentX = dxTmp;
-	currentY = dyTmp;
-	r++;
+		if (max == 0){
+			ctx.fillRect(dxTmp-3,dyTmp-3, size, size);
+		}else{
+			ctx.fillRect(dxTmp-3,dyTmp-3, size, size);
+		}
+		
+		currentX = dxTmp;
+		currentY = dyTmp;
+		r++;
     }
     
     var arrayLength = mem.length;
@@ -121,8 +121,11 @@ function drawAll2(){
 
 initialCanvas = initializeCanvas();
 
-var core = setInterval(drawAll, 300);
-setTimeout(function( ) { clearInterval( core ); }, 15000);
 
-var core2 = setInterval(drawAll2, 600);
-setTimeout(function( ) { clearInterval( core2 ); }, 15000);
+if (Math.random() > 0.5) {
+	var core = setInterval(drawAll, 60);
+	setTimeout(function( ) { clearInterval( core ); }, 8000);
+}else{
+	var core2 = setInterval(drawAll2, 200);
+	setTimeout(function( ) { clearInterval( core2 ); }, 8000);
+}
