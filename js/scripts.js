@@ -56,7 +56,6 @@ function drawRandomLine(ctx, x0, y0, max = 0){
     
     while (r < 60) {
 		
-		ctx.moveTo(currentX, currentY);
 		if (max == 0){
 			var dxTmp = dx + getRandomArbitrary(-1,1)*rscale + currentX
 			var dyTmp = dy + getRandomArbitrary(-1,1.4)*rscale + currentY
@@ -68,21 +67,29 @@ function drawRandomLine(ctx, x0, y0, max = 0){
 		
 		mem.push(dxTmp);
 		mem.push(dyTmp);
-		
-		ctx.lineTo(dxTmp, dyTmp);
+
+		ctx.moveTo(currentX, currentY);
+		if (Math.random() > 0.2){
+			ctx.bezierCurveTo(currentX, currentY+1, dxTmp, currentY-1, dxTmp, dyTmp);
+		}else{
+			ctx.lineTo(dxTmp, dyTmp);
+		}
 		ctx.lineWidth = 0.02;
 		
 		if (Math.random() > 0.3){
-			var item = items[0];
+			var item = "gray";
 			
 		}else {
-			var item = items[1];
+			var item = "gray";
 			
 		}
 
+		
 		ctx.strokeStyle = item;
-		ctx.globalAlpha = 0.9;
-		ctx.stroke();
+		ctx.globalAlpha = 0.6;
+		if (r % 20 == 0){
+			ctx.stroke();
+		}
 		ctx.fillStyle = rcol.random();
 		ctx.globalAlpha = 0.6;
 		
@@ -120,7 +127,6 @@ function drawAll2(){
 }
 
 initialCanvas = initializeCanvas();
-
 
 if (Math.random() > 0.5) {
 	var core = setInterval(drawAll, 60);
