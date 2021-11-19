@@ -94,7 +94,7 @@ function drawRandomLine(ctx, x0, y0, max = 0){
 		ctx.globalAlpha = 0.6;
 		
 		if (max == 0){
-			var size = Math.floor(Math.random() * (4)) + 4;
+			var size = Math.floor(Math.random() * (Math.random())*6) + 4;
 			
 		}else{
 			var size = Math.floor(Math.random() * (8)) + 8;
