@@ -131,7 +131,7 @@ function drawAll3(){
 	
 	var height = $(document).height();
 	var width = $(document).width();
-	var rcol = ["orange", "yellow", "red", "white", "BurlyWood", "DarkOrange", "GolderRod", "blue", "DarkOliveGreen"];
+	//var rcol = ["orange", "yellow", "red", "white", "BurlyWood", "DarkOrange", "GolderRod", "blue", "DarkOliveGreen"];
 	var rcol = ["BurlyWood", "DarkOliveGreen", "GoldenRod"];
 	var ntriangle = 70;
 	initialCanvas.globalAlpha = 0.1;
