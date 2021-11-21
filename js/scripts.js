@@ -126,12 +126,51 @@ function drawAll2(){
     drawRandomLine(initialCanvas, k, k, max = 2);
 }
 
+
+function drawAll3(){
+	
+	var height = $(document).height();
+	var width = $(document).width();
+	var rcol = ["orange", "yellow", "red", "white", "BurlyWood", "DarkOrange", "GolderRod", "blue", "DarkOliveGreen"];
+	var rcol = ["BurlyWood", "DarkOliveGreen", "GoldenRod"];
+	var ntriangle = 70;
+	initialCanvas.globalAlpha = 0.1;
+	var offset = 30 * Math.random();	
+	for (let i = 0; i < ntriangle; i++){
+		if (Math.random() > 0.5){
+		}else{var offset = - offset}
+		var randomInitX = width  * Math.random();
+		var randomInitY = height * Math.random();
+		initialCanvas.beginPath();
+		initialCanvas.moveTo(randomInitX, randomInitY);
+		initialCanvas.lineTo(randomInitX + offset * Math.random() * 2, randomInitY);
+		initialCanvas.lineTo(randomInitX + offset, randomInitY-offset);
+		var col = rcol.random()
+		initialCanvas.fillStyle = col;
+		initialCanvas.fill();
+		initialCanvas.globalAlpha = 0.01;
+	}
+	
+}
+
 initialCanvas = initializeCanvas();
 
-if (Math.random() > 0.5) {
+// init state.
+var rnum = Math.random();
+
+if (rnum > 0.70) {
+	
 	var core = setInterval(drawAll, 60);
 	setTimeout(function( ) { clearInterval( core ); }, 8000);
+	
+}else if (rnum > 0.3 && rnum < 0.7) {
+
+	var core = setInterval(	drawAll3, 50);
+	setTimeout(function( ) { clearInterval( core ); }, 14000);
+	
 }else{
-	var core2 = setInterval(drawAll2, 200);
-	setTimeout(function( ) { clearInterval( core2 ); }, 8000);
+	
+	var core = setInterval(drawAll2, 200);
+	setTimeout(function( ) { clearInterval( core ); }, 8000);
+	
 }
