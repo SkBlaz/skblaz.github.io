@@ -153,20 +153,24 @@ function drawAll3(){
 	
 }
 
-function juliaAux(number, boundary=2){
+function juliaAux(number, boundary=3){
 
-	var z = math.complex(0, 0)
+	var z = math.complex(0.0, 0.0)
 	var n = 0
-	while (math.abs(z) <= boundary && n < 100){
-		z = math.add(z * z, number);		
+	while (math.abs(z) <= boundary && n < 60){
+		z = math.add(math.multiply(z,z,z,z), number);
 		n += 1
-	}
-	return n
+	}	
+	if (n == 100){return 100}	
+	var ml1 = math.log2(math.abs(z));
+	var ml2 = math.log(ml1);
+	var ml3 = n + 1 - ml2
+	return ml3
 
 }
 
 function drawCircle(obj) {
-	obj.ctx.globalAlpha = 0.03;
+	obj.ctx.globalAlpha = 0.3;
 	obj.ctx.beginPath();
 	obj.ctx.arc(obj.x, obj.y, obj.radius, 0, 2 * Math.PI, false);
 	if (obj.fill) {
@@ -180,29 +184,43 @@ function drawCircle(obj) {
 	}
 }
 
+function toColor(num) {
+    num >>>= 0;
+    var b = num & 0xFF,
+        g = (num & 0xFF00) >>> 8,
+        r = (num & 0xFF0000) >>> 16,
+        a = ( (num & 0xFF000000) >>> 24 ) / 255 ;
+    return "rgba(" + [r, g, b, a].join(",") + ")";
+}
+
 function drawAll4(){
 
 	var height = $(document).height();
 	var jnum = 0;
 	var width = $(document).width();
+	var RE_START = -2
+	var RE_END = 2
+	var IM_START = -1
+	var IM_END = 1
 	for (let i =0; i <= width; i++) {
-		for (let j =0; j <= width; j++) {
-			if (Math.random() > 0.999999){
-				x = i / height;
-				y = j / width;
-				var cnum = math.complex(x, y);
+		for (let j =0; j <= height; j++) {
+			if (Math.random() > 0.999){
+				var x = RE_START + (i / width)  * (RE_END - RE_START);
+				var y = IM_START + (j / height) * (IM_END - IM_START);
+				var cnum = math.complex(x, y);				
 				var juliaNum = juliaAux(cnum);
 				jnum += 1
-				if (juliaNum != 100){
-					console.log(juliaNum)
+				if (juliaNum < 60){
+					var color = "rgba("+math.multiply(juliaNum,2)+","+math.multiply(juliaNum,3)+","+math.multiply(juliaNum,2)+",1)"
 					drawCircle({
 						ctx: initialCanvas,
-						x: i,						
+						x: i,
 						y: j,
-						radius: 200 * Math.random() / jnum,
-						fill: ["CadetBlue","Red"].random(),
+						radius: 2, //200 * Math.random() / jnum,
+						fill: color,//["CadetBlue","Red"].random(),
 					});
 				}
+				
 			}
 		}
 	}	
@@ -211,6 +229,7 @@ function drawAll4(){
 initialCanvas = initializeCanvas();
 
 var rnum = Math.floor(Math.random() * 4);
+
 if (rnum == 0) {
 
 	var core = setInterval(drawAll, 60);
@@ -218,13 +237,13 @@ if (rnum == 0) {
 
 }else if (rnum == 1) {
 
-	var core = setInterval(	drawAll3, 20);
+	var core = setInterval(	drawAll3, 50);
 	setTimeout(function( ) { clearInterval( core ); }, 14000);
 
 }else if (rnum == 2) {
 
-	var core = setInterval(	drawAll4, 60);
-	setTimeout(function( ) { clearInterval( core ); }, 15000);
+	var core = setInterval(	drawAll4, 20);
+	setTimeout(function( ) { clearInterval( core ); }, 10000);
 
 
 }else{
