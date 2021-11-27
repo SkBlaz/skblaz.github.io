@@ -153,24 +153,83 @@ function drawAll3(){
 	
 }
 
+function juliaAux(number, boundary=2){
+
+	var z = math.complex(0, 0)
+	var n = 0
+	while (math.abs(z) <= boundary && n < 100){
+		z = math.add(z * z, number);		
+		n += 1
+	}
+	return n
+
+}
+
+function drawCircle(obj) {
+	obj.ctx.globalAlpha = 0.03;
+	obj.ctx.beginPath();
+	obj.ctx.arc(obj.x, obj.y, obj.radius, 0, 2 * Math.PI, false);
+	if (obj.fill) {
+		obj.ctx.fillStyle = obj.fill;
+		obj.ctx.fill();
+	}
+	if (obj.stroke) {
+		obj.ctx.lineWidth = obj.strokeWidth;
+		obj.ctx.strokeStype = obj.stroke;
+		obj.ctx.stroke();
+	}
+}
+
+function drawAll4(){
+
+	var height = $(document).height();
+	var jnum = 0;
+	var width = $(document).width();
+	for (let i =0; i <= width; i++) {
+		for (let j =0; j <= width; j++) {
+			if (Math.random() > 0.999999){
+				x = i / height;
+				y = j / width;
+				var cnum = math.complex(x, y);
+				var juliaNum = juliaAux(cnum);
+				jnum += 1
+				if (juliaNum != 100){
+					console.log(juliaNum)
+					drawCircle({
+						ctx: initialCanvas,
+						x: i,						
+						y: j,
+						radius: 200 * Math.random() / jnum,
+						fill: ["CadetBlue","Red"].random(),
+					});
+				}
+			}
+		}
+	}	
+}
+
 initialCanvas = initializeCanvas();
 
-// init state.
-var rnum = Math.random();
+var rnum = Math.floor(Math.random() * 4);
+if (rnum == 0) {
 
-if (rnum > 0.70) {
-	
 	var core = setInterval(drawAll, 60);
 	setTimeout(function( ) { clearInterval( core ); }, 8000);
-	
-}else if (rnum > 0.3 && rnum < 0.7) {
 
-	var core = setInterval(	drawAll3, 50);
+}else if (rnum == 1) {
+
+	var core = setInterval(	drawAll3, 20);
 	setTimeout(function( ) { clearInterval( core ); }, 14000);
-	
+
+}else if (rnum == 2) {
+
+	var core = setInterval(	drawAll4, 60);
+	setTimeout(function( ) { clearInterval( core ); }, 15000);
+
+
 }else{
-	
+
 	var core = setInterval(drawAll2, 200);
 	setTimeout(function( ) { clearInterval( core ); }, 8000);
-	
+
 }
