@@ -210,13 +210,15 @@ function drawAll4(){
 				var cnum = math.complex(x, y);				
 				var juliaNum = juliaAux(cnum);
 				jnum += 1
+
 				if (juliaNum < 60){
-					var color = "rgba("+math.multiply(juliaNum,2)+","+math.multiply(juliaNum,3)+","+math.multiply(juliaNum,2)+",1)"
+					var color = "rgba("+math.multiply(juliaNum,Math.floor(Math.random() * 5))+
+						","+math.multiply(juliaNum,Math.floor(Math.random() * 15))+","+math.multiply(juliaNum,Math.floor(Math.random() * 12))+",0.7)"
 					drawCircle({
 						ctx: initialCanvas,
 						x: i,
 						y: j,
-						radius: 2, //200 * Math.random() / jnum,
+						radius: 4 * Math.random(), //200 * Math.random() / jnum,
 						fill: color,//["CadetBlue","Red"].random(),
 					});
 				}
@@ -228,7 +230,7 @@ function drawAll4(){
 
 initialCanvas = initializeCanvas();
 
-var rnum = Math.floor(Math.random() * 4);
+var rnum = Math.floor(Math.random() * 6);
 
 if (rnum == 0) {
 
@@ -242,13 +244,12 @@ if (rnum == 0) {
 
 }else if (rnum == 2) {
 
-	var core = setInterval(	drawAll4, 20);
-	setTimeout(function( ) { clearInterval( core ); }, 10000);
-
+	var core = setInterval(drawAll2, 200);
+	setTimeout(function( ) { clearInterval( core ); }, 8000);
 
 }else{
 
-	var core = setInterval(drawAll2, 200);
-	setTimeout(function( ) { clearInterval( core ); }, 8000);
+	var core = setInterval(	drawAll4, 20);
+	setTimeout(function( ) { clearInterval( core ); }, 10000);
 
 }
