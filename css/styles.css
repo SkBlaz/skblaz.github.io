@@ -10057,12 +10057,256 @@ canvas {
     z-index:-1;
 }
 
+.bh-open-btn {
+  font-family: "Merriweather Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #f6e7d7;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.98), rgba(0, 0, 0, 0.98)) padding-box,
+    linear-gradient(
+      112deg,
+      rgba(255, 214, 152, 0.86) 0%,
+      rgba(163, 255, 176, 0.9) 20%,
+      rgba(127, 218, 255, 0.94) 40%,
+      rgba(204, 156, 255, 0.94) 62%,
+      rgba(255, 141, 202, 0.9) 82%,
+      rgba(255, 221, 165, 0.88) 100%
+    ) border-box;
+  background-size: 100% 100%, 260% 100%;
+  background-position: 0% 50%, 0% 50%;
+  border: 1px solid transparent;
+  padding: 16px 34px;
+  border-radius: 999px;
+  margin-top: 45vh;
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.35), inset 0 0 22px rgba(255, 186, 120, 0.12);
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+  transition: opacity 1.1s ease, transform 1.1s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  animation: bhBtnBorderShift 11s linear infinite;
+}
+
+.bh-open-btn .bh-name {
+  display: inline-block;
+}
+
+.bh-open-btn .bh-reflect {
+  background-size: 220% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: saturate(1.45) brightness(1.18);
+  text-shadow: 0 0 6px rgba(180, 255, 220, 0.28);
+  animation: bhTextNebulaShift 7.5s ease-in-out infinite alternate;
+}
+
+.bh-open-btn .bh-reflect--a {
+  background-image: linear-gradient(
+    108deg,
+    #ffeab8 0%,
+    #b6ffb8 24%,
+    #8fdfff 46%,
+    #bfa6ff 66%,
+    #ff9adf 82%,
+    #ffe3a9 100%
+  );
+}
+
+.bh-open-btn .bh-reflect--b {
+  background-image: linear-gradient(
+    108deg,
+    #ffe4a6 0%,
+    #98ffd4 20%,
+    #78d8ff 44%,
+    #c8a8ff 64%,
+    #ff8ed1 84%,
+    #fff0bb 100%
+  );
+  animation-delay: 1.4s;
+}
+
+.bh-open-btn .bh-reflect--c {
+  background-image: linear-gradient(
+    108deg,
+    #ffdca0 0%,
+    #b8ff9c 22%,
+    #8ec8ff 44%,
+    #c99cff 64%,
+    #ff89c7 82%,
+    #ffe6b1 100%
+  );
+  animation-delay: 2.2s;
+}
+
+@keyframes bhTextNebulaShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes bhBtnBorderShift {
+  0% {
+    background-position: 0% 50%, 0% 50%;
+  }
+  100% {
+    background-position: 0% 50%, 100% 50%;
+  }
+}
+
+.bh-open-btn.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+@media (max-width: 720px) {
+  .bh-open-btn {
+    margin-top: 45vh;
+  }
+}
+
+.bh-open-btn.is-visible:hover,
+.bh-open-btn.is-visible:focus {
+  transform: translateY(-1px);
+  filter: saturate(1.12) brightness(1.07);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45), inset 0 0 30px rgba(255, 186, 120, 0.2);
+  outline: none;
+}
+
+.bh-modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2000;
+  transition: opacity 0.2s ease;
+}
+
+.bh-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bh-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 2, 1, 0.7);
+  backdrop-filter: blur(6px);
+}
+
+.bh-modal__dialog {
+  position: relative;
+  width: min(92vw, 720px);
+  background: linear-gradient(160deg, rgba(26, 18, 12, 0.96), rgba(10, 7, 5, 0.96));
+  border: 1px solid rgba(255, 191, 130, 0.25);
+  border-radius: 24px;
+  padding: 32px 36px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  color: #f4e6d7;
+  z-index: 1;
+}
+
+.bh-modal__close {
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  color: rgba(255, 220, 190, 0.7);
+  cursor: pointer;
+}
+
+.bh-modal__close:hover,
+.bh-modal__close:focus {
+  color: rgba(255, 220, 190, 1);
+  outline: none;
+}
+
+.bh-modal__content {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 28px;
+  align-items: center;
+}
+
+.bh-modal__media {
+  display: flex;
+  justify-content: center;
+}
+
+.bh-modal .avatar-img {
+  transform-origin: 50% 52%;
+}
+
+.bh-modal.is-open .avatar-img {
+  animation: bhAvatarBuzz 0.22s infinite linear, bhAvatarDrift 3.6s infinite ease-in-out;
+  will-change: transform;
+}
+
+@keyframes bhAvatarBuzz {
+  0% { transform: translate(0px, 0px) rotate(0deg); }
+  20% { transform: translate(0.45px, -0.35px) rotate(0.14deg); }
+  40% { transform: translate(-0.4px, 0.3px) rotate(-0.16deg); }
+  60% { transform: translate(0.35px, 0.42px) rotate(0.1deg); }
+  80% { transform: translate(-0.35px, -0.42px) rotate(-0.12deg); }
+  100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes bhAvatarDrift {
+  0% { filter: brightness(0.98); }
+  50% { filter: brightness(1.03); }
+  100% { filter: brightness(0.98); }
+}
+
+.bh-modal__title {
+  font-family: "Merriweather Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.bh-modal__text {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: rgba(244, 230, 215, 0.9);
+}
+
+.modal-open {
+  overflow: hidden;
+}
+
+@media (max-width: 720px) {
+  .bh-modal__dialog {
+    padding: 24px;
+  }
+
+  .bh-modal__content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .bh-modal__media {
+    justify-content: center;
+  }
+
+  .bh-modal__title {
+    font-size: 1.35rem;
+  }
+}
+
 
 header.masthead {
-  /* padding-top: 10rem; */
-  /* padding-bottom: calc(10rem - 4.5rem); */
-  /* background: rgba(0,0,0,0.5); */
-  /* background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.6) 100%), url("../assets/img/background6.jpg"); */
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -10075,8 +10319,6 @@ header.masthead h1 {
   header.masthead {
     height: 100vh;
     min-height: 40rem;
-    /* padding-top: 4.5rem; */
-    /* padding-bottom: 20rem; */
   }
   header.masthead p {
     font-size: 1.15rem;
@@ -10204,4 +10446,55 @@ header.masthead h1 {
 
 .zoom:hover {
   transform: scale(2); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+.bh-detail-control {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 40;
+  display: grid;
+  grid-template-columns: auto minmax(160px, 220px) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 220, 170, 0.35);
+  border-radius: 999px;
+  background: rgba(8, 8, 12, 0.58);
+  backdrop-filter: blur(4px);
+  color: rgba(255, 235, 210, 0.92);
+}
+
+.bh-detail-control__label {
+  margin: 0;
+  font-size: 0.78rem;
+  text-transform: lowercase;
+  letter-spacing: 0.12em;
+  font-family: "Merriweather Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+.bh-detail-control__slider {
+  width: 100%;
+  accent-color: #f4f0d4;
+}
+
+.bh-detail-control__value {
+  min-width: 2.2rem;
+  text-align: right;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  font-family: "Merriweather Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+.modal-open .bh-detail-control {
+  opacity: 0.45;
+}
+
+@media (max-width: 720px) {
+  .bh-detail-control {
+    width: calc(100vw - 20px);
+    grid-template-columns: auto 1fr auto;
+    bottom: 10px;
+  }
 }

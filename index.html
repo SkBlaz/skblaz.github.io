@@ -13,12 +13,10 @@
     <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Merriweather+Sans:wght@400;700&display=swap" rel="stylesheet" />
-    <!-- Third party plugin CSS-->
-    <link rel="stylesheet" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css">
+    <!-- Third party icon CSS-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="css/styles.css?v=20260208-62" rel="stylesheet" />
     
     <!-- Google Analytics Script -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8ZXGT0Q00H"></script>
@@ -39,52 +37,100 @@
         }
 
         .avatar-img {
-            width: 100%; /* Make the image fill the width */
-            height: 100%; /* Make the image fill the height */
-            object-fit: cover; /* Maintain aspect ratio while filling the space */
-            margin-bottom: 15px; /* Add space below the image */
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 
 <body id="page-top">
     <!-- Masthead Section -->
-    <canvas id="myCanvas" style="position: absolute; top: 0; left: 0; z-index: -1;"></canvas>
+    <canvas id="myCanvas" style="position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;"></canvas>
     <header class="masthead">
         <div class="container h-100">
             <div class="row h-100 align-items-center justify-content-center text-center">
-                <div class="col-lg-10 align-self-end">
-                    <div class="avatar-wrapper">
-                        <img src="assets/img/bw.jpg" alt="Avatar of Blaž Škrlj" class="img-fluid mb-4 avatar-img">
-                    </div>
-                </div>
-                <div class="col-lg-8 align-self-baseline">
-                  <p class="text-white-75 mb-5 content-text"><br>I'm a machine learning researcher/engineer interested in <i>supercomputing &cap; search &cap; learning</i>. Currently mostly focusing on large scale recommendation, representation learning and LLMs.
-</a>
-
-</p>
-                    <hr class="divider my-4" />
-                    <div class="social-buttons">
-                        <!-- <a class="btn btn-outline-light btn-social mx-1" href="https://twitter.com/skblaz?lang=en" target="_blank" aria-label="Twitter"><i class="fab fa-fw fa-twitter"></i></a> -->
-                        <a class="btn btn-outline-light btn-social mx-1" href="https://github.com/SkBlaz" target="_blank" aria-label="GitHub"><i class="fab fa-fw fa-github"></i></a>
-                        <a class="btn btn-outline-light btn-social mx-1" href="https://scholar.google.si/citations?user=62cLf9AAAAAJ&hl=en" target="_blank" aria-label="Google Scholar"><i class="ai fa-fw ai-google-scholar-square"></i></a>
-                        <!-- <a class="btn btn-outline-light btn-social mx-1" href="gallery.html" target="_blank" aria-label="Gallery"><i class="ai fa-fw far fa-images"></i></a> -->
-                    </div>
+                <div class="col-lg-8 align-self-start">
+                    <button id="openProfileModal" class="bh-open-btn" type="button" data-modal-open aria-label="Blaž Škrlj"><span class="bh-name">Bla<span class="bh-reflect bh-reflect--a">ž</span> <span class="bh-reflect bh-reflect--b">Š</span>kr<span class="bh-reflect bh-reflect--c">lj</span></span></button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Scripts at the bottom to improve page load speed -->
-    <!-- Bootstrap core JS-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.0.0/math.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <!-- Third-party plugin JS-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <div id="blazModal" class="bh-modal" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="bh-modal__backdrop" data-modal-close></div>
+        <div class="bh-modal__dialog" role="document">
+            <button class="bh-modal__close" type="button" aria-label="Close" data-modal-close>&times;</button>
+            <div class="bh-modal__content">
+                <div class="bh-modal__media">
+                    <div class="avatar-wrapper">
+                        <img src="assets/img/bw.jpg" alt="Avatar of Blaž Škrlj" class="img-fluid avatar-img">
+                    </div>
+                </div>
+                <div class="bh-modal__body">
+                    <h2 class="bh-modal__title">Blaž Škrlj</h2>
+                    <p class="bh-modal__text">I'm a machine learning researcher/engineer interested in <i>supercomputing &cap; search &cap; learning</i>. Currently mostly focusing on large scale recommendation, representation learning and LLMs.</p>
+                    <div class="social-buttons">
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://github.com/SkBlaz" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-fw fa-github"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://scholar.google.si/citations?user=62cLf9AAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar"><i class="ai fa-fw ai-google-scholar-square"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bh-detail-control" aria-label="Detail control">
+        <label class="bh-detail-control__label" for="detailSlider">detail</label>
+        <input id="detailSlider" class="bh-detail-control__slider" type="range" min="0" max="1" step="0.01" value="0" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0">
+        <span id="detailValue" class="bh-detail-control__value">0</span>
+    </div>
+
     <!-- Core theme JS-->
-    <script src="js/scripts.js"></script>
+    <script src="js/scripts.js?v=20260208-66"></script>
+    <script>
+        (function () {
+            const modal = document.getElementById("blazModal");
+            const openBtn = document.getElementById("openProfileModal");
+            if (!modal || !openBtn) return;
+            const BUTTON_REVEAL_DELAY_MS = 5000;
+
+            const closeElements = modal.querySelectorAll("[data-modal-close]");
+
+            function openModal() {
+                modal.classList.add("is-open");
+                modal.setAttribute("aria-hidden", "false");
+                document.body.classList.add("modal-open");
+            }
+
+            function closeModal() {
+                modal.classList.remove("is-open");
+                modal.setAttribute("aria-hidden", "true");
+                document.body.classList.remove("modal-open");
+            }
+
+            window.blazOpenModal = openModal;
+            openBtn.classList.remove("is-visible");
+            openBtn.setAttribute("aria-hidden", "true");
+            openBtn.tabIndex = -1;
+            openBtn.style.opacity = "0";
+            openBtn.style.pointerEvents = "none";
+            openBtn.style.transform = "translateY(14px)";
+            window.setTimeout(() => {
+                openBtn.classList.add("is-visible");
+                openBtn.removeAttribute("aria-hidden");
+                openBtn.tabIndex = 0;
+                openBtn.style.opacity = "1";
+                openBtn.style.pointerEvents = "auto";
+                openBtn.style.transform = "translateY(0)";
+            }, BUTTON_REVEAL_DELAY_MS);
+            openBtn.addEventListener("click", openModal);
+            closeElements.forEach((el) => el.addEventListener("click", closeModal));
+            document.addEventListener("keydown", (evt) => {
+                if (evt.key === "Escape") closeModal();
+            });
+        })();
+    </script>
 </body>
 
 </html>

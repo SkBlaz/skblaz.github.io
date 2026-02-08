@@ -1,0 +1,25 @@
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Python cache
+__pycache__/
+
+# Local logs
+*.log
+
+# Local QA artifacts (root-level screenshots/check frames)
+/eq_*.png
+/eq2_*.png
+/eq_check_*.png
+/qa_*.png
+/baseline_*.png
+/check*.png
+/*_2s.png
+/to_fix.png
+
+# Local backup work
+/backup/
