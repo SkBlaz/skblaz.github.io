@@ -10067,12 +10067,12 @@ canvas {
     linear-gradient(rgba(0, 0, 0, 0.98), rgba(0, 0, 0, 0.98)) padding-box,
     linear-gradient(
       112deg,
-      rgba(255, 214, 152, 0.86) 0%,
-      rgba(163, 255, 176, 0.9) 20%,
-      rgba(127, 235, 191, 0.94) 40%,
-      rgba(124, 226, 168, 0.94) 62%,
-      rgba(124, 214, 255, 0.9) 82%,
-      rgba(214, 255, 182, 0.88) 100%
+      rgba(127, 179, 255, 0.92) 0%,
+      rgba(95, 154, 246, 0.92) 22%,
+      rgba(72, 128, 220, 0.94) 44%,
+      rgba(61, 110, 198, 0.95) 64%,
+      rgba(97, 158, 247, 0.92) 84%,
+      rgba(157, 211, 255, 0.9) 100%
     ) border-box;
   background-size: 100% 100%, 260% 100%;
   background-position: 0% 50%, 0% 50%;
@@ -10080,7 +10080,7 @@ canvas {
   padding: 16px 34px;
   border-radius: 999px;
   margin-top: 45vh;
-  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.35), inset 0 0 22px rgba(255, 186, 120, 0.12);
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.35), inset 0 0 22px rgba(130, 186, 255, 0.14);
   opacity: 0;
   transform: translateY(14px);
   pointer-events: none;
@@ -10148,7 +10148,7 @@ canvas {
 .bh-open-btn.is-visible:focus {
   transform: translateY(-1px);
   filter: saturate(1.12) brightness(1.07);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45), inset 0 0 30px rgba(255, 186, 120, 0.2);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45), inset 0 0 30px rgba(148, 201, 255, 0.24);
   outline: none;
 }
 

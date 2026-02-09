@@ -449,7 +449,7 @@
     }
 
     async function init() {
-            const ASSET_VER = "20260208-80";
+            const ASSET_VER = "20260209-84";
 
         const CAMERA_TUNING = {
             approachStart: 1.0,
@@ -489,7 +489,7 @@
             spin: 0.52,
             diskInnerRadius: 2.95,
             diskOuterRadius: 12.0,
-            diskOpacity: 0.60
+            diskOpacity: 0.86
         };
         const JETS_ENABLED = JET_TUNING.base > 0.0001;
 
@@ -506,7 +506,7 @@
             adiskEnabled: 1.0,
             adiskParticle: 1.0,
             adiskHeight: 0.30,
-            adiskLit: 0.026,
+            adiskLit: 0.078,
             adiskDensityV: 0.95,
             adiskDensityH: 2.15,
             adiskNoiseScale: 1.0,

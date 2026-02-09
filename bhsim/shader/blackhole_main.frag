@@ -332,8 +332,8 @@ void adiskColor(vec3 pos, inout vec3 color, inout float alpha) {
 
   // ISCO-like cutoff to keep the inner disk physically plausible.
   density *= smoothstep(innerRadius, innerRadius * 1.1, length(pos));
-  // Soften the inner glow to avoid a solid blob.
-  density *= smoothstep(innerRadius * 1.1, innerRadius * 2.2, length(pos));
+  // Keep a visible hot rim while still avoiding a flat inner blob.
+  density *= smoothstep(innerRadius * 1.02, innerRadius * 1.65, length(pos));
 
   // Avoid the shader computation when density is very small.
   if (density < 0.001) {
@@ -377,20 +377,20 @@ void adiskColor(vec3 pos, inout vec3 color, inout float alpha) {
   float amberBand =
       0.5 + 0.5 * sin(sphericalCoord.y * 1.35 - sphericalCoord.z * 0.60 + time * 0.90);
   float amberMask = smoothstep(0.38, 0.96, amberBand);
-  vec3 warmTint = vec3(0.70, 0.80, 1.04);
-  vec3 coolTint = vec3(0.12, 0.54, 1.14);
-  vec3 cobaltTint = vec3(0.08, 0.62, 1.22);
-  vec3 amberTint = vec3(0.56, 0.74, 1.06);
+  vec3 warmTint = vec3(1.74, 1.24, 0.50);
+  vec3 coolTint = vec3(0.62, 0.82, 1.12);
+  vec3 cobaltTint = vec3(0.54, 0.76, 1.15);
+  vec3 amberTint = vec3(2.15, 1.34, 0.34);
   vec3 tint = mix(warmTint, coolTint, coolMask);
   tint = mix(tint, cobaltTint, spiralMask * 0.62);
   tint = mix(tint, amberTint,
              amberMask * (0.20 + 0.30 * (1.0 - radialT)) * (0.55 + 0.45 * abs(noise)));
-  dustColor *= mix(vec3(1.0), tint, 0.50);
+  dustColor *= mix(vec3(1.0), tint, 0.74);
   float dustMagenta = max(0.0, min(dustColor.r, dustColor.b) - dustColor.g * 0.75);
   float dustMagMask = smoothstep(0.01, 0.20, dustMagenta);
   dustColor.r = mix(dustColor.r, dustColor.g * 0.78, dustMagMask);
-  dustColor = boostColor(dustColor, 1.12, 0.95);
-  dustColor = suppressWarmArtifacts(dustColor);
+  dustColor = boostColor(dustColor, 1.10, 1.00);
+  dustColor = mix(dustColor, suppressWarmArtifacts(dustColor), 0.08);
   float sparkle =
       smoothstep(0.78, 1.0, abs(noise)) * (0.11 + 0.14 * (1.0 - radialT));
   dustColor += tint * sparkle;
@@ -403,12 +403,15 @@ void adiskColor(vec3 pos, inout vec3 color, inout float alpha) {
   vec3 bbColor = texture(colorMap, vec2(tColor, 0.5)).rgb;
   float intensityCorr = ntFlux / pow(colorCorr, 4.0);
   float thermalGain = 4.2 * pow(max(intensityCorr, 1e-4), 0.55);
-  bbColor *= vec3(0.66, 0.80, 1.04);
-  dustColor = mix(dustColor, bbColor, 0.20);
+  bbColor *= vec3(1.52, 1.08, 0.48);
+  dustColor = mix(dustColor, bbColor, 0.58);
   dustColor = mix(vec3(dot(dustColor, vec3(0.2126, 0.7152, 0.0722))), dustColor,
                   0.93);
-  float blueBand = exp(-pow((tColor - 0.42) / 0.18, 2.0));
-  dustColor = mix(dustColor, dustColor * vec3(0.92, 1.00, 1.10), 0.09 * blueBand);
+  float warmBand = exp(-pow((tColor - 0.58) / 0.22, 2.0));
+  dustColor = mix(dustColor, dustColor * vec3(1.26, 1.13, 0.68), 0.58 * warmBand);
+  float innerHot = exp(-pow((radialT - 0.06) / 0.08, 2.0));
+  float hotStructure = smoothstep(0.45, 0.95, amberMask * (0.65 + 0.35 * abs(noise)));
+  dustColor += vec3(2.30, 1.55, 0.36) * innerHot * hotStructure * 0.56;
   dustColor *= thermalGain;
 
   // Mild relativistic beaming and gravitational redshift approximation.
@@ -422,8 +425,10 @@ void adiskColor(vec3 pos, inout vec3 color, inout float alpha) {
   float gravShift = sqrt(max(1.0 - 1.0 / max(r, 1.001), 0.06));
   float shift = clamp(doppler * gravShift, 0.6, 1.4);
   float beaming = pow(shift, 1.7);
+  float emissionProfile = 0.34 + 2.25 * pow(1.0 - radialT, 0.62);
+  float noiseAmp = mix(0.64, 1.0, abs(noise));
 
-  color += density * adiskLit * dustColor * alpha * abs(noise) * beaming * diskOpacity;
+  color += density * adiskLit * dustColor * alpha * noiseAmp * beaming * diskOpacity * emissionProfile;
 }
 
 void jetColor(vec3 pos, inout vec3 color, inout float alpha) {
@@ -540,8 +545,8 @@ vec3 traceColor(vec3 pos, vec3 dir) {
   // Sample skybox color
   dir = rotateVector(dir, vec3(0.0, 1.0, 0.0),
                      time * SKYBOX_ROTATION_SPEED + SKYBOX_ROTATION_OFFSET);
-  color += sampleGalaxySeamless(dir) * alpha;
-  return suppressWarmArtifacts(color);
+  color += suppressWarmArtifacts(sampleGalaxySeamless(dir)) * alpha;
+  return color;
 }
 
 void main() {
