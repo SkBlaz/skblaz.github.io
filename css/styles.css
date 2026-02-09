@@ -10062,17 +10062,17 @@ canvas {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.22em;
-  color: #f6e7d7;
+  color: #fff;
   background:
     linear-gradient(rgba(0, 0, 0, 0.98), rgba(0, 0, 0, 0.98)) padding-box,
     linear-gradient(
       112deg,
       rgba(255, 214, 152, 0.86) 0%,
       rgba(163, 255, 176, 0.9) 20%,
-      rgba(127, 218, 255, 0.94) 40%,
-      rgba(204, 156, 255, 0.94) 62%,
-      rgba(255, 141, 202, 0.9) 82%,
-      rgba(255, 221, 165, 0.88) 100%
+      rgba(127, 235, 191, 0.94) 40%,
+      rgba(124, 226, 168, 0.94) 62%,
+      rgba(124, 214, 255, 0.9) 82%,
+      rgba(214, 255, 182, 0.88) 100%
     ) border-box;
   background-size: 100% 100%, 260% 100%;
   background-position: 0% 50%, 0% 50%;
@@ -10090,56 +10090,28 @@ canvas {
 
 .bh-open-btn .bh-name {
   display: inline-block;
+  color: #fff;
 }
 
 .bh-open-btn .bh-reflect {
-  background-size: 220% 100%;
-  background-position: 0% 50%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  filter: saturate(1.45) brightness(1.18);
-  text-shadow: 0 0 6px rgba(180, 255, 220, 0.28);
-  animation: bhTextNebulaShift 7.5s ease-in-out infinite alternate;
+  background: none;
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+  filter: none;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.22);
+  animation: none;
 }
 
 .bh-open-btn .bh-reflect--a {
-  background-image: linear-gradient(
-    108deg,
-    #ffeab8 0%,
-    #b6ffb8 24%,
-    #8fdfff 46%,
-    #bfa6ff 66%,
-    #ff9adf 82%,
-    #ffe3a9 100%
-  );
+  background-image: none;
 }
 
 .bh-open-btn .bh-reflect--b {
-  background-image: linear-gradient(
-    108deg,
-    #ffe4a6 0%,
-    #98ffd4 20%,
-    #78d8ff 44%,
-    #c8a8ff 64%,
-    #ff8ed1 84%,
-    #fff0bb 100%
-  );
-  animation-delay: 1.4s;
+  background-image: none;
 }
 
 .bh-open-btn .bh-reflect--c {
-  background-image: linear-gradient(
-    108deg,
-    #ffdca0 0%,
-    #b8ff9c 22%,
-    #8ec8ff 44%,
-    #c99cff 64%,
-    #ff89c7 82%,
-    #ffe6b1 100%
-  );
-  animation-delay: 2.2s;
+  background-image: none;
 }
 
 @keyframes bhTextNebulaShift {

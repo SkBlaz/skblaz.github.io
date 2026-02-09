@@ -282,6 +282,34 @@ vec3 boostColor(vec3 c, float saturation, float gain) {
   return sat * gain;
 }
 
+vec3 gradeDeepSpace(vec3 src, float structureMask, float starMask) {
+  float magenta = max(0.0, min(src.r, src.b) - src.g * 0.72);
+  float magMask = smoothstep(0.01, 0.18, magenta);
+  float warmBlob = smoothstep(0.78, 1.55, src.r + src.g) *
+                   (1.0 - smoothstep(0.18, 0.46, src.b));
+  vec3 c = src;
+  c = mix(c, c * vec3(0.78, 0.92, 1.06), magMask * 0.65);
+  c = mix(c, c * vec3(0.64, 0.80, 1.06), warmBlob * 0.92);
+
+  // Keep only a tiny warm accent in structures.
+  vec3 warmDust = vec3(0.90, 0.74, 0.42) * structureMask;
+  c += warmDust * 0.006;
+
+  vec3 starCol = src * vec3(0.98, 1.00, 1.04) + vec3(0.003, 0.005, 0.010);
+  c = mix(c, starCol, starMask * 0.62);
+  return clamp(boostColor(c, 1.03, 0.98), vec3(0.0), vec3(5.0));
+}
+
+vec3 suppressWarmArtifacts(vec3 c) {
+  float lum = dot(c, vec3(0.2126, 0.7152, 0.0722));
+  float warm =
+      max(0.0, c.r - c.b * 0.94) * max(0.0, c.g - c.b * 0.90);
+  float warmMask = smoothstep(0.0, 0.16, warm) * smoothstep(0.05, 0.85, lum);
+  vec3 cooled = vec3(c.r * 0.68 + c.b * 0.20, c.g * 0.84 + c.b * 0.12,
+                     c.b * 1.06 + c.g * 0.04);
+  return mix(c, cooled, warmMask * 0.92);
+}
+
 float novikovThorneFlux(float r, float rin) {
   float x = max(r / max(rin, EPSILON), 1.0001);
   float term = max(1.0 - sqrt(1.0 / x), 0.0);
@@ -324,7 +352,7 @@ void adiskColor(vec3 pos, inout vec3 color, inout float alpha) {
   density = min(density, 1.0);
 
   if (adiskParticle < 0.5) {
-    color += vec3(0.0, 1.0, 0.0) * density * 0.02;
+    color += vec3(0.35, 0.55, 1.0) * density * 0.02;
     return;
   }
 
@@ -344,21 +372,25 @@ void adiskColor(vec3 pos, inout vec3 color, inout float alpha) {
   float swirlBand =
       0.5 + 0.5 * sin(sphericalCoord.y * 1.7 + sphericalCoord.z * 0.45 + time * 0.8);
   float coolMask = smoothstep(0.25, 0.85, radialT);
-  float magentaMask =
+  float spiralMask =
       smoothstep(0.62, 0.98, swirlBand * (0.65 + 0.35 * abs(noise)));
-  float greenBand =
+  float amberBand =
       0.5 + 0.5 * sin(sphericalCoord.y * 1.35 - sphericalCoord.z * 0.60 + time * 0.90);
-  float greenMask = smoothstep(0.38, 0.96, greenBand);
-  vec3 warmTint = vec3(1.44, 0.88, 0.30);
-  vec3 coolTint = vec3(0.34, 0.92, 1.34);
-  vec3 magentaTint = vec3(1.34, 0.54, 1.20);
-  vec3 emeraldTint = vec3(0.40, 1.36, 0.62);
+  float amberMask = smoothstep(0.38, 0.96, amberBand);
+  vec3 warmTint = vec3(0.70, 0.80, 1.04);
+  vec3 coolTint = vec3(0.12, 0.54, 1.14);
+  vec3 cobaltTint = vec3(0.08, 0.62, 1.22);
+  vec3 amberTint = vec3(0.56, 0.74, 1.06);
   vec3 tint = mix(warmTint, coolTint, coolMask);
-  tint = mix(tint, magentaTint, magentaMask * 0.62);
-  tint = mix(tint, emeraldTint,
-             greenMask * (0.22 + 0.28 * (1.0 - radialT)) * (0.55 + 0.45 * abs(noise)));
-  dustColor *= mix(vec3(1.0), tint, 0.80);
-  dustColor = boostColor(dustColor, 1.36, 1.09);
+  tint = mix(tint, cobaltTint, spiralMask * 0.62);
+  tint = mix(tint, amberTint,
+             amberMask * (0.20 + 0.30 * (1.0 - radialT)) * (0.55 + 0.45 * abs(noise)));
+  dustColor *= mix(vec3(1.0), tint, 0.50);
+  float dustMagenta = max(0.0, min(dustColor.r, dustColor.b) - dustColor.g * 0.75);
+  float dustMagMask = smoothstep(0.01, 0.20, dustMagenta);
+  dustColor.r = mix(dustColor.r, dustColor.g * 0.78, dustMagMask);
+  dustColor = boostColor(dustColor, 1.12, 0.95);
+  dustColor = suppressWarmArtifacts(dustColor);
   float sparkle =
       smoothstep(0.78, 1.0, abs(noise)) * (0.11 + 0.14 * (1.0 - radialT));
   dustColor += tint * sparkle;
@@ -370,12 +402,13 @@ void adiskColor(vec3 pos, inout vec3 color, inout float alpha) {
   float tColor = clamp(tEff * colorCorr * 2.8, 0.0, 1.0);
   vec3 bbColor = texture(colorMap, vec2(tColor, 0.5)).rgb;
   float intensityCorr = ntFlux / pow(colorCorr, 4.0);
-  float thermalGain = 18.0 * pow(max(intensityCorr, 1e-4), 0.55);
-  dustColor = mix(dustColor, bbColor, 0.78);
+  float thermalGain = 4.2 * pow(max(intensityCorr, 1e-4), 0.55);
+  bbColor *= vec3(0.66, 0.80, 1.04);
+  dustColor = mix(dustColor, bbColor, 0.20);
   dustColor = mix(vec3(dot(dustColor, vec3(0.2126, 0.7152, 0.0722))), dustColor,
                   0.93);
-  float cyanBand = exp(-pow((tColor - 0.45) / 0.16, 2.0));
-  dustColor = mix(dustColor, dustColor * vec3(0.90, 1.08, 1.04), 0.16 * cyanBand);
+  float blueBand = exp(-pow((tColor - 0.42) / 0.18, 2.0));
+  dustColor = mix(dustColor, dustColor * vec3(0.92, 1.00, 1.10), 0.09 * blueBand);
   dustColor *= thermalGain;
 
   // Mild relativistic beaming and gravitational redshift approximation.
@@ -388,7 +421,7 @@ void adiskColor(vec3 pos, inout vec3 color, inout float alpha) {
   float doppler = 1.0 / max(gamma * (1.0 - dot(beta * tangential, toObserver)), 0.3);
   float gravShift = sqrt(max(1.0 - 1.0 / max(r, 1.001), 0.06));
   float shift = clamp(doppler * gravShift, 0.6, 1.4);
-  float beaming = pow(shift, 2.2);
+  float beaming = pow(shift, 1.7);
 
   color += density * adiskLit * dustColor * alpha * abs(noise) * beaming * diskOpacity;
 }
@@ -405,7 +438,7 @@ void jetColor(vec3 pos, inout vec3 color, inout float alpha) {
   float jet = core * along * (1.0 - fade);
   if (jet <= 0.0001) return;
 
-  vec3 jetCol = vec3(0.85, 0.6, 0.35);
+  vec3 jetCol = vec3(0.62, 0.84, 1.25);
   color += jetCol * jetStrength * jet * alpha;
 }
 
@@ -435,10 +468,27 @@ vec3 sampleGalaxySeamless(vec3 dir) {
   float minCh = min(min(c0.r, c0.g), c0.b);
   float sat = maxCh - minCh;
   float starMask = smoothstep(0.42, 1.0, lum) * (1.0 - smoothstep(0.05, 0.24, sat));
+  float contrastMask = smoothstep(0.03, 0.28, length(c0 - blur));
+  float ridge = abs(snoise(vec3(n.x * 10.0, n.y * 22.0, n.z * 10.0)));
+  float ridgeMask = smoothstep(0.58, 0.90, ridge) * (1.0 - starMask);
+  float structureMask = clamp(contrastMask * 0.72 + ridgeMask * 0.38, 0.0, 1.0);
 
   vec3 nebula = mix(c0, blur, 0.10 + 0.62 * starMask);
-  nebula = boostColor(nebula, 1.22, 1.04);
-  nebula.g *= 1.05;
+  nebula = boostColor(nebula, 1.08, 1.00);
+  nebula = gradeDeepSpace(nebula, structureMask, starMask);
+  // Soften high-latitude blob artifacts and keep poles cool/deep.
+  float northMask = 1.0 - smoothstep(0.02, 0.24, uv.y);
+  float southMask = smoothstep(0.76, 0.98, uv.y);
+  float poleMask = clamp(max(northMask, southMask), 0.0, 1.0);
+  vec3 poleBlur = (c0 + c1 + c2 + c3 + c4) * 0.20;
+  vec3 poleCool = poleBlur * vec3(0.82, 0.94, 1.08);
+  nebula = mix(nebula, poleCool, poleMask * 0.58);
+
+  float warmBlob = smoothstep(0.48, 1.02, nebula.r + nebula.g) *
+                   (1.0 - smoothstep(0.24, 0.52, nebula.b));
+  warmBlob *= 1.0 - starMask * 0.85;
+  nebula = mix(nebula, nebula * vec3(0.62, 0.86, 1.06), warmBlob * 0.95);
+  nebula = suppressWarmArtifacts(nebula);
   return clamp(nebula, vec3(0.0), vec3(5.0));
 }
 
@@ -491,7 +541,7 @@ vec3 traceColor(vec3 pos, vec3 dir) {
   dir = rotateVector(dir, vec3(0.0, 1.0, 0.0),
                      time * SKYBOX_ROTATION_SPEED + SKYBOX_ROTATION_OFFSET);
   color += sampleGalaxySeamless(dir) * alpha;
-  return color;
+  return suppressWarmArtifacts(color);
 }
 
 void main() {
